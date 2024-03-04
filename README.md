@@ -28,5 +28,3 @@ The solution utilizes a Trie, a tree-like data structure, for optimized storage 
 ## Time Complexity
 
 The solution's efficiency is influenced by the Trie's quick search, insertion, and deletion operations, each taking O(k) time, where k is the length of the word. The recursive nature of `isCompoundedWord` contributes to a streamlined process.
-
-Feel free to use and modify this code for your needs!
