@@ -1,18 +1,28 @@
 # Trie-Based Compounded Word Detection
 
-This program efficiently identifies compounded words using a Trie data structure.
-
 ## Overview
 
-The solution utilizes a Trie, a tree-like data structure, for optimized storage and retrieval of strings. The core function, `isCompoundedWord`, employs a recursive approach to determine if a given word is compounded, providing a boolean result.
+This program efficiently identifies compounded words using a Trie data structure. The decision to choose a Trie over a hashmap is explained below.
 
-## Implementation Steps
+## Design Decisions
+
+**Initial Consideration:**
+I contemplated using a hashmap to store words and check concatenation during searches.
+
+**Analysis and Decision:**
+Upon closer inspection, a Trie was deemed more suitable. It excels in word retrieval, quick prefix checks, recursive traversal for compounded words, memory efficiency, structured storage, and ease of implementation.
+
+## Approach
 
 1. **Trie Construction:**
-   - Build a Trie using the provided list of words.
+   - Built a Trie from the provided list of words.
 
-2. **Compounded Word Detection:**
-   - Implement the `isCompoundedWord` function for recursive identification of compounded words.
+2. **Compounded Word Identification:**
+   - Utilized the `isCompoundedWord` function for recursive Trie traversal to identify compounded words efficiently.
+
+## Time Complexity
+
+The time complexity is influenced by the Trie's efficiency, making the identification of compounded words streamlined.
 
 ## Usage
 
@@ -25,6 +35,4 @@ The solution utilizes a Trie, a tree-like data structure, for optimized storage 
 3. **Review Results:**
    - Examine the console output for identified compounded words.
 
-## Time Complexity
-
-The solution's efficiency is influenced by the Trie's quick search, insertion, and deletion operations, each taking O(k) time, where k is the length of the word. The recursive nature of `isCompoundedWord` contributes to a streamlined process.
+Feel free to modify and use this code for your needs!
