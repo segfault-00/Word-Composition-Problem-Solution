@@ -1,8 +1,68 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// Function to read words from a file and store them in a set
-void readWordsFromFile(unordered_set<string>& wordSet, const string& filePath) {
+class TrieNode {
+public:
+    TrieNode* children[26]; // Assuming lowercase English alphabet
+    bool isEndOfWord;
+
+    TrieNode() {
+        // Initialize children array with nullptr
+        for (int i = 0; i < 26; i++) {
+            children[i] = nullptr;
+        }
+        isEndOfWord = false;
+    }
+};
+
+class Trie {
+public:
+    TrieNode* root;
+
+    Trie() {
+        root = new TrieNode();
+    }
+
+    // Insert a word into the Trie
+    void insert(const string& word) {
+        TrieNode* current = root;
+        for (char ch : word) {
+            int index = ch - 'a';
+            if (!current->children[index]) {
+                current->children[index] = new TrieNode();
+            }
+            current = current->children[index];
+        }
+        current->isEndOfWord = true;
+    }
+
+    // Check if a word is a compounded word
+    bool isCompoundedWord(const string& str, int start, int end) {
+        TrieNode* current = root;
+
+        int originalStart = start;
+
+        while (start <= end) {
+            int index = str[start] - 'a';
+            if (!current->children[index]) {
+                return false;
+            }
+
+            current = current->children[index];
+
+            if (current->isEndOfWord && ((start == end && originalStart != 0) || isCompoundedWord(str, start + 1, end))) {
+                return true;
+            }
+
+            start++;
+        }
+
+        return false;
+    }
+};
+
+// Function to read words from a file and insert them into the Trie
+void readWordsFromFile(vector<string>& wordList, Trie* myTrie, const string& filePath) {
     ifstream file(filePath);
 
     if (!file.is_open()) {
@@ -12,39 +72,20 @@ void readWordsFromFile(unordered_set<string>& wordSet, const string& filePath) {
 
     string word;
     while (getline(file, word)) {
-        wordSet.insert(word);
+        myTrie->insert(word);
+        wordList.push_back(word);
     }
 
     file.close();
 }
 
-// Function to check if a word is compounded by combining shorter words from the set
-bool isCompoundedWord(string word, const unordered_set<string>& wordSet) {
-    for (int i = 1; i < word.size(); i++) {
-        string prefix = word.substr(0, i);
-        string suffix = word.substr(i);
-
-        if (wordSet.find(prefix) != wordSet.end() &&
-            (wordSet.find(suffix) != wordSet.end() || isCompoundedWord(suffix, wordSet))) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-// Function to process the file, find the longest and second-longest compounded words, and display the result
-void processFile(const string filePath) {
-    auto startTime = chrono::high_resolution_clock::now();
-
-    unordered_set<string> wordSet;
-    readWordsFromFile(wordSet, filePath);
-
+// Process the list of words to find the longest and second longest compounded words
+pair<string, string> findLongestCompoundedWords(vector<string>& wordList, Trie* myTrie) {
     string longestCompoundWord = "";
     string secondLongestCompoundWord = "";
 
-    for (const auto& word : wordSet) {
-        if (isCompoundedWord(word, wordSet)) {
+    for (auto word : wordList) {
+        if (myTrie->isCompoundedWord(word, 0, word.size() - 1)) {
             if (word.length() > longestCompoundWord.length()) {
                 secondLongestCompoundWord = longestCompoundWord;
                 longestCompoundWord = word;
@@ -54,11 +95,28 @@ void processFile(const string filePath) {
         }
     }
 
+    return {longestCompoundWord, secondLongestCompoundWord};
+}
+
+int main() {
+    auto startTime = chrono::high_resolution_clock::now();
+
+    Trie myTrie;
+    vector<string> wordList;
+
+    // Replace "Input_01.txt" with the appropriate file path
+    string filePath = "Input_02.txt";
+    readWordsFromFile(wordList, &myTrie, filePath);
+
+    pair<string, string> result = findLongestCompoundedWords(wordList, &myTrie);
+
+    string longestCompoundWord = result.first;
+    string secondLongestCompoundWord = result.second;
+
     auto endTime = chrono::high_resolution_clock::now();
     auto processingTime = chrono::duration_cast<chrono::milliseconds>(endTime - startTime).count();
 
-    
-     if (longestCompoundWord.empty()) {
+    if (longestCompoundWord.empty()) {
         cout << "No compounded words found in the file." << endl;
     } else {
         cout << "Longest Compound Word: " << longestCompoundWord << endl;
@@ -67,19 +125,10 @@ void processFile(const string filePath) {
         } else {
             cout << "Second Longest Compound Word: " << secondLongestCompoundWord << endl;
         }
-        cout << "Time taken to process file " << filePath << ": " << processingTime << " milli seconds" << endl;
+        cout << "Time taken to process file " << filePath << ": " << processingTime << " milliseconds" << endl;
     }
 
+    
 
-}
-
-int main() {
-    processFile("Input_02.txt");
     return 0;
 }
-
-
-
-//  Reading file : O(n.m)
-//  isCompoundedWord  : O(m^2)
-//  Processing Words in the Set: O(n*(m^2))  **** over all also
