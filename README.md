@@ -20,14 +20,26 @@ Upon closer inspection, a Trie was deemed more suitable. It excels in word retri
 2. **Compounded Word Identification:**
    - Utilized the `isCompoundedWord` function for recursive Trie traversal to identify compounded words efficiently.
 
-## Time Complexity
+## Time Complexities
 
-The time complexity is influenced by the Trie's efficiency, making the identification of compounded words streamlined.
+### 1. Reading Words from TXT File (`readWordsFromFile`):
+   - **Time Complexity: O(n * w)**
+     - *Explanation:* 'n' words are read from the file, and for each word, the `insert` operation is performed with a time complexity of O(w), where 'w' is the average length of a word.
 
-## Usage
+### 2. Processing (`findLongestCompoundedWords`):
+   - **Time Complexity: O(n * w^2)**
+     - *Explanation:* For each of the 'n' words, the `isCompoundedWord` function is called. The worst-case time complexity of `isCompoundedWord` is O(w^2) due to recursive substring checks.
 
-1. **Download Source Code:**
-   - Obtain the source code from the provided repository.
+### 3. Overall Time Complexity:
+   - **Overall Time Complexity: O(n * w^2)**
+     - *Explanation:* The overall time complexity of the program is dominated by the second part (processing), which has a quadratic term w^2.
+
+
+
+## Steps to execute code
+
+1. **Download Code and Input Files:**
+   - Download the C++ source code and input files. Place them in the same folder.
 
 2. **Compile and Run:**
    - Use a C++ compiler to compile the code and run the executable.
@@ -35,4 +47,3 @@ The time complexity is influenced by the Trie's efficiency, making the identific
 3. **Review Results:**
    - Examine the console output for identified compounded words.
 
-Feel free to modify and use this code for your needs!
