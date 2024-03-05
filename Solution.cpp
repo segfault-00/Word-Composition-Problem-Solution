@@ -1,3 +1,4 @@
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -85,7 +86,7 @@ pair<string, string> findLongestCompoundedWords(vector<string>& wordList, Trie* 
     string secondLongestCompoundWord = "";
 
     for (auto word : wordList) {
-        if (myTrie->isCompoundedWord(word, 0, word.size() - 1)) {
+        if (myTrie -> isCompoundedWord(word, 0, word.size() - 1)) {
             if (word.length() > longestCompoundWord.length()) {
                 secondLongestCompoundWord = longestCompoundWord;
                 longestCompoundWord = word;
@@ -125,10 +126,12 @@ int main() {
         } else {
             cout << "Second Longest Compound Word: " << secondLongestCompoundWord << endl;
         }
-        cout << "Time taken to process file " << filePath << ": " << processingTime << " milliseconds" << endl;
+        cout << "Time taken to process file " << filePath << ": " << processingTime << " milli seconds" << endl;
     }
 
     
 
     return 0;
 }
+
+
